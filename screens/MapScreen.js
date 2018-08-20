@@ -1,16 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from "react-native";
 import { MapView, Permissions, Location } from "expo";
-import { Marker } from "react-native-maps";
+import { Marker, AnimatedRegion, Polyline } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
+import haversine from "haversine";
 
-
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = 0.0421;
 export default class MapScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
             location: null,
-            title: null
+            title: null,
         };
     }
 
@@ -23,7 +25,6 @@ export default class MapScreen extends React.Component {
             />
         ),
     };
-
 
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -40,6 +41,18 @@ export default class MapScreen extends React.Component {
         this._getLocationAsync();
     }
 
+    // calcDistance = newLatLng => {
+    //     const { prevLatLng } = this.state;
+    //     return haversine(prevLatLng, newLatLng) || 0;
+    // };
+
+    getMapRegion = () => ({
+        latitude: this.state.location.coords.latitude,
+        longitude: this.state.location.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+    });
+
     render() {
         if (!this.state.location) {
             return <View />;
@@ -47,12 +60,9 @@ export default class MapScreen extends React.Component {
         return (
             <MapView
                 style={{ flex: 1 }}
-                initialRegion={{
-                    latitude: this.state.location.coords.latitude,
-                    longitude: this.state.location.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
-                }}
+                initialRegion={
+                    this.getMapRegion()
+                }
             >
                 <Marker
                     title="You"

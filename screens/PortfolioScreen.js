@@ -13,13 +13,14 @@ export default class PortfolioScreen extends React.Component {
     }
 
     static navigationOptions = ({ navigation }) => {
+        console.log(navigation);
         return {
             title: 'Protfolio',
             headerRight: (
                 // <Button title='EDIT' onPress={()=> this.toogleEdit()}/>
                 <TouchableOpacity
                     style={{ paddingRight: 10 }}
-                    onPress={() => navigation.getParam('edit')}
+                    onPress={() => navigation.state.params.edit()}
                 >
                     <Entypo
                         name='edit'
@@ -32,6 +33,7 @@ export default class PortfolioScreen extends React.Component {
 
     componentDidMount() {
         this.props.navigation.setParams({ edit: this.toogleEdit });
+        console.log(this.props.navigation);
     }
 
     toogleEdit = () => {
