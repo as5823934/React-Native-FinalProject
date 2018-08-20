@@ -1,9 +1,9 @@
 {
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 41769,
-  "expoServerNgrokUrl": "https://mj-4u5.hunter3934.checkinmap.exp.direct",
-  "packagerNgrokUrl": "https://packager.mj-4u5.hunter3934.checkinmap.exp.direct",
-  "ngrokPid": 41792,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002
 }

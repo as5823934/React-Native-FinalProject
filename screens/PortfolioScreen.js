@@ -12,22 +12,23 @@ export default class PortfolioScreen extends React.Component {
         };
     }
 
-    static navigationOptions = ({ navigation }) => ({
-        title: 'Protfolio',
-        headerRight: (
-            // <Button title='EDIT' onPress={()=> this.toogleEdit()}/>
-            <TouchableOpacity
-                style={{ paddingRight: 10 }}
-                onPress={() => navigation.getParam('edit')}
-            >
-                <Entypo
-                    name='edit'
-                    size={30}
-                />
-            </TouchableOpacity>
-        ),
-        headerBackTitle: '',
-    });
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: 'Protfolio',
+            headerRight: (
+                // <Button title='EDIT' onPress={()=> this.toogleEdit()}/>
+                <TouchableOpacity
+                    style={{ paddingRight: 10 }}
+                    onPress={() => navigation.getParam('edit')}
+                >
+                    <Entypo
+                        name='edit'
+                        size={30}
+                    />
+                </TouchableOpacity>
+            ),
+        }
+    };
 
     componentDidMount() {
         this.props.navigation.setParams({ edit: this.toogleEdit });

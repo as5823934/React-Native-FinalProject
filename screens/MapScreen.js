@@ -55,9 +55,19 @@ export default class MapScreen extends React.Component {
                 }}
             >
                 <Marker
-                    title="Home"
+                    title="You"
                     coordinate={this.state.location.coords}
                 />
+
+                <Marker
+                    coordinate={{
+                        latitude: 49.285087,
+                        longitude: -123.112974,
+                    }}
+                    title={'Target'}
+                    description={'Targeted location for check in'}
+                />
+                
             </MapView>
 
         );
