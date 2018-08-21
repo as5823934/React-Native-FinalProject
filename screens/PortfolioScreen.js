@@ -1,64 +1,58 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
-import { Ionicons, Entypo } from "@expo/vector-icons";
-
-
+import { Ionicons, Entypo } from '@expo/vector-icons';
 
 export default class PortfolioScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            editable: false,
-        };
-    }
-
-    static navigationOptions = ({ navigation }) => {
-        console.log(navigation);
-        return {
-            title: 'Protfolio',
-            headerRight: (
-                // <Button title='EDIT' onPress={()=> this.toogleEdit()}/>
-                <TouchableOpacity
-                    style={{ paddingRight: 10 }}
-                    onPress={() => navigation.state.params.edit()}
-                >
-                    <Entypo
-                        name='edit'
-                        size={30}
-                    />
-                </TouchableOpacity>
-            ),
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      editable: false,
     };
+  }
 
-    componentDidMount() {
-        this.props.navigation.setParams({ edit: this.toogleEdit });
-        console.log(this.props.navigation);
-    }
+  static navigationOptions = ({ navigation }) => {
+    console.log(navigation);
+    return {
+      title: 'Protfolio',
+      headerRight: (
+        // <Button title='EDIT' onPress={()=> this.toogleEdit()}/>
+        <TouchableOpacity
+          style={{ paddingRight: 10 }}
+          onPress={() => navigation.state.params.edit()}>
+          <Entypo name="edit" size={30} />
+        </TouchableOpacity>
+      ),
+    };
+  };
 
-    toogleEdit = () => {
-        this.setState({ editable: !this.state.editable });
-        console.log('edit: ', this.state.editable);
-    }
+  componentDidMount() {
+    this.props.navigation.setParams({ edit: this.toogleEdit });
+    console.log(this.props.navigation);
+  }
 
-    update = () => {
-        this.setState({editable: false});
-        alert('Information Updated');
-    }
+  toogleEdit = () => {
+    this.setState({ editable: !this.state.editable });
+    console.log('edit: ', this.state.editable);
+  };
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>PortfolioScreen</Text>
-            </View>
-        );
-    }
+  update = () => {
+    this.setState({ editable: false });
+    alert('Information Updated');
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text>PortfolioScreen</Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
