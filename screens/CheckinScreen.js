@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MapView, Permissions, Location } from 'expo';
 import firebase from 'firebase';
-import { getUserInfo } from '../auth';
+import { getUserInfo } from '../config_auth';
 
 export default class CheckinScreen extends React.Component {
   constructor(props) {

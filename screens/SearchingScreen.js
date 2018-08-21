@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
-import { GOOGLE_API_KEY } from '../auth';
+import { GOOGLE_API_KEY } from '../config_auth';
 
 // const homePlace = {
 //   description: 'Home',

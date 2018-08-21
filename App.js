@@ -15,7 +15,7 @@ import CheckOutScreen from './screens/CheckoutScreen';
 import SearchingScreen from './screens/SearchingScreen';
 import LoginScreen from './screens/LoginScreen';
 import InfoScreen from './screens/InfoScreen';
-import { initAuthApp } from './auth';
+import { initAuthApp } from './config_auth';
 import PortfolioScreen from './screens/PortfolioScreen';
 
 const MainTabs = createBottomTabNavigator({

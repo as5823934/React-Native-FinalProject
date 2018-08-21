@@ -52,7 +52,8 @@ node_modules
 .nvm
 /bots/node_modules/
 package-lock.json
-auth.*
+config_auth.*
+config_auth.js
 
 # OS X
 .DS_Store
