@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Ionicons } from '@expo/vector-icons';
 import firebase from 'firebase';
+import { getUserInfo, addLocationToData } from '../config_auth';
 import { GOOGLE_API_KEY } from '../config_auth';
 
 // const homePlace = {
@@ -43,28 +44,7 @@ export default class SearchingScreen extends React.Component {
     if (location === null || title === null) {
       return;
     }
-    const user = await firebase.auth().currentUser;
-    const locationBook = {
-      location,
-      title,
-    };
-    await firebase
-      .database()
-      .ref('users/')
-      .child(user.uid)
-      .update({
-        locationBook,
-      })
-      .then(data => {
-        // success callback
-        alert(`Location saved: ${title}`);
-        console.log('data added');
-      })
-      .catch(error => {
-        // error callback
-        alert('Something went wrong...');
-        console.log('error ', error);
-      });
+    addLocationToData(location, title);
   };
 
   GooglePlacesInput = () => (
@@ -84,6 +64,7 @@ export default class SearchingScreen extends React.Component {
           location: details.geometry.location,
           title: data.structured_formatting.main_text,
         });
+        this.addInfoToFirebase(this.state.location, this.state.title);
         this.props.navigation.navigate('Map', {
           location: this.state.location,
         });

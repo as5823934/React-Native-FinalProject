@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MapView, Permissions, Location } from 'expo';
 import firebase from 'firebase';
-import { getUserInfo } from '../config_auth';
+import { getUserInfo, updateCurrentLocation } from '../config_auth';
+import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 
 export default class CheckinScreen extends React.Component {
   constructor(props) {
@@ -26,29 +27,13 @@ export default class CheckinScreen extends React.Component {
   });
 
   componentWillMount() {
-    this._getLocationAsync();
+    this.getCurrentLocation();
   }
 
-  _getLocationAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      console.error('Location permission not granted!');
-      return;
-    }
-    const location = await Location.getCurrentPositionAsync({});
+  getCurrentLocation = async () => {
+    const location = await getLocationAsync();
     this.setState({ currentLocation: location });
-    const id = this.props.navigation.getParam('UID');
-    const myLocation = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
-    const ref = await firebase
-      .database()
-      .ref('users')
-      .child(id)
-      .update({
-        myLocation,
-      });
+    updateCurrentLocation(location.coords);
     console.log('current location: ', this.state.currentLocation.coords);
     this.loadUserInfo();
   };

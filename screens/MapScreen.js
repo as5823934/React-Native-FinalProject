@@ -4,15 +4,17 @@ import { Permissions, Location } from 'expo';
 import MapView, { Marker } from 'react-native-maps';
 import Polyline from '@mapbox/polyline';
 import { Ionicons } from '@expo/vector-icons';
-import haversine from 'haversine';
+import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = 0.0421;
+const LATITUDE = 49.1913466;
+const LONGTITUDE = -122.8490125;
 export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLocation: { latitude: 49.1913466, longitude: -122.8490125 },
+      currentLocation: null,
       targetLocation: this.props.navigation.getParam('location', null),
       title: null,
       coords: [],
@@ -31,16 +33,11 @@ export default class MapScreen extends React.Component {
     ),
   };
 
-  getLocationAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      console.error('Location permission not granted!');
-      return;
-    }
-    const location = await Location.getCurrentPositionAsync({});
+  getCurrentLocation = async () => {
+    const location = await getLocationAsync();
     // check if have target location
     if (this.state.targetLocation) {
-      const distance = this.calculateDistance(
+      const distance = calculateDistance(
         location.coords.latitude,
         location.coords.longitude,
         this.state.targetLocation.lat,
@@ -60,25 +57,20 @@ export default class MapScreen extends React.Component {
   };
 
   componentDidMount() {
-    // this.getLocationAsync();
+    this.getCurrentLocation();
+    this.getRoute();
     console.log('new target: ', this.state.targetLocation);
   }
 
   componentWillReceiveProps(nextProps) {
     const newTarget = nextProps.navigation.state.params.location;
     console.log('on props receive: ', newTarget);
-
-    // this.setState({
-    //   targetLocation: newTarget,
-    // });
-    // console.log('new target receive: ', this.state.targetLocation);
-
     if (
       newTarget !== this.state.targetLocation ||
       this.state.targetLocation === null
     ) {
-      // this.getLocationAsync();
-      const distance = this.calculateDistance(
+      this.getCurrentLocation();
+      const distance = calculateDistance(
         this.state.currentLocation.latitude,
         this.state.currentLocation.longitude,
         newTarget.lat,
@@ -90,10 +82,9 @@ export default class MapScreen extends React.Component {
         console.log('new target receive: ', this.state.targetLocation),
         console.log('aftre distance: ', this.state.distance)
       );
-      const latitude = this.state.currentLocation.latitude;
-      const longitude = this.state.currentLocation.longitude;
-      this.getDirections(
-        `${latitude},${longitude}`,
+      const current = this.state.currentLocation;
+      this.getRoute(
+        `${current.latitude},${current.longitude}`,
         `${newTarget.lat},${newTarget.lng}`
       );
     }
@@ -120,43 +111,9 @@ export default class MapScreen extends React.Component {
     return targetinfo;
   }
 
-  calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371e3; // metres
-    const φ1 = (lat1 * Math.PI) / 180;
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    const d = R * c;
-    return parseInt(d);
-  }
-
-  getDirections = async (startLoc, destinationLoc) => {
-    try {
-      const resp = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}`
-      );
-      console.log(resp);
-      const respJson = await resp.json();
-      console.log(respJson);
-      const points = Polyline.decode(
-        respJson.routes[0].overview_polyline.points
-      );
-      const coords = points.map((point, index) => ({
-        latitude: point[0],
-        longitude: point[1],
-      }));
-      this.setState({ coords });
-      console.log(coords);
-      return coords;
-    } catch (error) {
-      return error;
-    }
+  getRoute = async (lat, lng) => {
+    const coords = await getDirections(lat, lng);
+    this.setState({ coords });
   };
 
   render() {
@@ -202,6 +159,11 @@ export default class MapScreen extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <MapView style={{ flex: 1 }} initialRegion={this.getMapRegion()}>
+          <MapView.Polyline
+            coordinates={this.state.coords}
+            strokeWidth={2}
+            strokeColor="red"
+          />
           <Marker
             title="You"
             coordinate={{
