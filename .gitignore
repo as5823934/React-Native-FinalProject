@@ -52,6 +52,7 @@ node_modules
 .nvm
 /bots/node_modules/
 package-lock.json
+auth.js
 
 # OS X
 .DS_Store
@@ -59,7 +60,6 @@ package-lock.json
 # Test generated files
 /ReactAndroid/src/androidTest/assets/AndroidTestBundle.js
 *.js.meta
-auth.js
 
 /coverage
 /third-party
