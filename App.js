@@ -1,7 +1,5 @@
 import React from 'react';
-import { Button, TouchableOpacity, Text } from 'react-native';
-import { MapView, Permissions, Location } from 'expo';
-import firebase from 'firebase';
+import { TouchableOpacity } from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator,

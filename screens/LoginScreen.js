@@ -38,7 +38,7 @@ export default class LoginScreen extends React.Component {
       // if success
       .then(this.onSuccess)
       .catch(() => {
-        //if not found-> create
+        // if not found-> create
         firebase
           .auth()
           .createUserWithEmailAndPassword(email, password)
@@ -112,20 +112,23 @@ export default class LoginScreen extends React.Component {
   };
 
   renderLoginButton = () => {
-        if (this.state.loading) {
-            return (
-                <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
-                  <ActivityIndicator size="large" color="#0000ff" />
-                </View>
-            );
-        } 
-            return(
-                <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
-                    <Button title="Login" onPress={this.onLogin} disabled={!this.state.isFormValid} />
-                </View>
-            );
-        
+    if (this.state.loading) {
+      return (
+        <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
     }
+    return (
+      <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
+        <Button
+          title="Login"
+          onPress={this.onLogin}
+          disabled={!this.state.isFormValid}
+        />
+      </View>
+    );
+  };
 
   render() {
     return (

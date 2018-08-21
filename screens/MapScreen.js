@@ -9,12 +9,12 @@ import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = 0.0421;
 const LATITUDE = 49.1913466;
-const LONGTITUDE = -122.8490125;
+const LONGITUDE = -122.8490125;
 export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLocation: null,
+      currentLocation: { latitude: LATITUDE, longitude: LONGITUDE },
       targetLocation: this.props.navigation.getParam('location', null),
       title: null,
       coords: [],
@@ -57,8 +57,8 @@ export default class MapScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.getCurrentLocation();
-    this.getRoute();
+    // this.getCurrentLocation();
+    // this.getRoute();
     console.log('new target: ', this.state.targetLocation);
   }
 
