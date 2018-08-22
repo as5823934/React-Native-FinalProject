@@ -77,7 +77,14 @@ const AppNavigator = createSwitchNavigator(
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentLocation: null,
+      targetLocation: null,
+      targetTitle: null,
+      coords: [],
+      curTime: new Date().toLocaleString(),
+      distance: 0,
+    };
   }
 
   componentDidMount() {
@@ -85,7 +92,22 @@ export default class App extends React.Component {
     initAuthApp();
   }
 
+  setTargetLocation = (location, title) => {
+    this.setState({
+      targetLocation: location,
+      targetTitle: title,
+    });
+  };
+
   render() {
-    return <AppNavigator />;
+    return (
+      <AppNavigator
+        screenProps={{
+          submitTargetLocation: this.setTargetLocation,
+          targetLocation: this.state.targetLocation,
+          targetTitle: this.state.targetTitle,
+        }}
+      />
+    );
   }
 }

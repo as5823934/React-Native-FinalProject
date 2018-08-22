@@ -20,7 +20,6 @@ export default class LoginScreen extends React.Component {
       errMessage: null,
       loading: false,
       isFormValid: false,
-      loggedIn: false,
     };
   }
 
@@ -32,19 +31,23 @@ export default class LoginScreen extends React.Component {
   onLogin = () => {
     const { email, password } = this.state;
     this.setState({ loading: true });
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      // if success
-      .then(this.onSuccess)
-      .catch(() => {
-        // if not found-> create
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password)
-          .then(this.onCreateSuccess) // if success
-          .catch(this.onFail); // if fail
-      });
+    try {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        // if success
+        .then(this.onSuccess)
+        .catch(() => {
+          // if not found-> create
+          firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(this.onCreateSuccess) // if success
+            .catch(this.onFail); // if fail
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   validateForm = () => {

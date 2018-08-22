@@ -64,7 +64,11 @@ export default class SearchingScreen extends React.Component {
           location: details.geometry.location,
           title: data.structured_formatting.main_text,
         });
-        this.addInfoToFirebase(this.state.location, this.state.title);
+        // this.addInfoToFirebase(this.state.location, this.state.title);
+        this.props.screenProps.submitTargetLocation(
+          this.state.location,
+          this.state.title
+        );
         this.props.navigation.navigate('Map', {
           location: this.state.location,
         });

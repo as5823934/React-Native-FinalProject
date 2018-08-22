@@ -26,6 +26,20 @@ export const getLocationAsync = async () => {
   return location;
 };
 
+export const updateLocation = async () => {
+  Location.watchPositionAsync(
+    {
+      enableHighAccuracy: true,
+      distanceInterval: 10,
+    },
+    NewLocation => {
+      const coords = NewLocation.coords;
+      console.log('NEW LOCATION COORDS', coords);
+      return coords;
+    }
+  );
+};
+
 export const getDirections = async (startLoc, destinationLoc) => {
   try {
     const resp = await fetch(

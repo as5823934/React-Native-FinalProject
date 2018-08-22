@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
-import { Permissions, Location } from 'expo';
+import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import Polyline from '@mapbox/polyline';
 import { Ionicons } from '@expo/vector-icons';
 import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 
@@ -10,11 +8,12 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = 0.0421;
 const LATITUDE = 49.1913466;
 const LONGITUDE = -122.8490125;
+
 export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLocation: { latitude: LATITUDE, longitude: LONGITUDE },
+      currentLocation: null,
       targetLocation: this.props.navigation.getParam('location', null),
       title: null,
       coords: [],
@@ -57,37 +56,34 @@ export default class MapScreen extends React.Component {
   };
 
   componentDidMount() {
-    // this.getCurrentLocation();
-    // this.getRoute();
+    // this.getUpdateLocation();
+    this.getCurrentLocation();
     console.log('new target: ', this.state.targetLocation);
   }
 
   componentWillReceiveProps(nextProps) {
-    const newTarget = nextProps.navigation.state.params.location;
+    // const newTarget = nextProps.navigation.getParam('location');
+    const newTarget = nextProps.screenProps.targetLocation;
     console.log('on props receive: ', newTarget);
-    if (
-      newTarget !== this.state.targetLocation ||
-      this.state.targetLocation === null
-    ) {
-      this.getCurrentLocation();
-      const distance = calculateDistance(
-        this.state.currentLocation.latitude,
-        this.state.currentLocation.longitude,
-        newTarget.lat,
-        newTarget.lng
-      );
+    // if (newTarget !== this.state.targetLocation) {
+    //   // this.getCurrentLocation();
+    const distance = calculateDistance(
+      this.state.currentLocation.latitude,
+      this.state.currentLocation.longitude,
+      newTarget.lat,
+      newTarget.lng
+    );
 
-      this.setState(
-        { targetLocation: newTarget, distance },
-        console.log('new target receive: ', this.state.targetLocation),
-        console.log('aftre distance: ', this.state.distance)
-      );
-      const current = this.state.currentLocation;
-      this.getRoute(
-        `${current.latitude},${current.longitude}`,
-        `${newTarget.lat},${newTarget.lng}`
-      );
-    }
+    this.setState(
+      { targetLocation: newTarget, distance },
+      console.log('new target receive: ', this.state.targetLocation),
+      console.log('aftre distance: ', this.state.distance)
+    );
+    const current = this.state.currentLocation;
+    this.getRoute(
+      `${current.latitude},${current.longitude}`,
+      `${newTarget.lat},${newTarget.lng}`
+    );
   }
 
   getMapRegion() {
@@ -120,7 +116,7 @@ export default class MapScreen extends React.Component {
     if (!this.state.currentLocation) {
       return <View />;
     }
-    if (this.state.targetLocation) {
+    if (this.props.screenProps.targetLocation) {
       return (
         <View style={{ flex: 1 }}>
           <MapView style={{ flex: 1 }} initialRegion={this.getMapRegion()}>
@@ -136,7 +132,7 @@ export default class MapScreen extends React.Component {
                 longitude: this.state.currentLocation.longitude,
               }}
             />
-            {this.state.targetLocation ? (
+            {this.props.screenProps.targetLocation ? (
               <Marker
                 title={'Target'}
                 coordinate={{
@@ -158,7 +154,7 @@ export default class MapScreen extends React.Component {
     }
     return (
       <View style={{ flex: 1 }}>
-        <MapView style={{ flex: 1 }} initialRegion={this.getMapRegion()}>
+        <MapView style={{ flex: 2 }} initialRegion={this.getMapRegion()}>
           <MapView.Polyline
             coordinates={this.state.coords}
             strokeWidth={2}
