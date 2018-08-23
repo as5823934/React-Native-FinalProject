@@ -4,8 +4,8 @@ import MapView, { Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = 0.0421;
+const LATITUDE_DELTA = 0.0922 / 1.5;
+const LONGITUDE_DELTA = 0.0421 / 1.5;
 const LATITUDE = 49.1913466;
 const LONGITUDE = -122.8490125;
 
