@@ -9,8 +9,8 @@ export default class CheckinScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLocation: { latitude: 49.28595240000001, longitude: -123.1115642 },
-      targetLocation: null,
+      currentLocation: null,
+      targetLocation: this.props.screenProps.targetLocation,
       id: this.props.navigation.getParam('UID'),
       userInfo: null,
       distance: 0,
@@ -27,36 +27,43 @@ export default class CheckinScreen extends React.Component {
     ),
   });
 
-  // componentWillReceiveProps(nextProps) {
-  //   const newTarget = nextProps.navigation.state.params.tar;
-  //   console.log(newTarget);
-  // }
-
-  componentWillMount() {
-    // this.getCurrentLocation();
-    // updateCurrentLocation(location.coords);
-    // console.log('current location: ', this.state.currentLocation.coords);
-    this.loadUserInfo();
+  componentDidMount() {
+    this.getCurrentLocation();
+    if (this.props.screenProps.targetLocation) {
+      this.setState({ IsCheckable: !this.state.IsCheckable });
+    }
     console.log('screenProps:', this.props.screenProps.targetLocation);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.screenProps.targetLocation) {
+      const distance = calculateDistance(
+        this.state.currentLocation.latitude,
+        this.state.currentLocation.longitude,
+        nextProps.screenProps.targetLocation.lat,
+        nextProps.screenProps.targetLocation.lng
+      );
+      this.setState({
+        targetLocation: nextProps.screenProps.targetLocation,
+        distance,
+      });
+    }
   }
 
   getCurrentLocation = async () => {
     const location = await getLocationAsync();
     this.setState({ currentLocation: location.coords });
-  };
-
-  loadUserInfo = async () => {
-    const id = this.props.navigation.getParam('UID');
-    const ref = await getUserInfo(id);
-    this.setState({ userInfo: ref });
-    console.log('userinfo loaded: ', this.state.userInfo);
+    updateCurrentLocation(this.state.currentLocation);
+    this.props.screenProps.setCurrentLocation(this.state.currentLocation);
   };
 
   testPress = async () => {
     const target = this.props.screenProps.targetLocation;
     const title = this.props.screenProps.targetTitle;
-    const location = await this.getCurrentLocation();
+    const location = await getLocationAsync();
     this.setState({ currentLocation: location.coords });
+    this.props.screenProps.setCurrentLocation(this.state.currentLocation);
+
     const distance = calculateDistance(
       this.state.currentLocation.latitude,
       this.state.currentLocation.longitude,
@@ -71,6 +78,7 @@ export default class CheckinScreen extends React.Component {
       alert('You can not check in');
     } else {
       checkIn(target, title);
+      this.props.screenProps.validateCheckInButton();
       alert('Check in success');
     }
   };
@@ -78,11 +86,18 @@ export default class CheckinScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => this.testPress()}>
-          <Ionicons name="md-checkmark-circle" size={150} color="green" />
+        <TouchableOpacity
+          onPress={() => this.testPress()}
+          disabled={!this.props.screenProps.isCheckInable}>
+          <Ionicons
+            name="md-checkmark-circle"
+            size={150}
+            color={!this.props.screenProps.isCheckInable ? 'gray' : 'green'}
+          />
         </TouchableOpacity>
-        <Text>CheckinScreen</Text>
-        <Text>///</Text>
+        <Text>Checkin</Text>
+        <Text>Destination: {this.props.screenProps.targetTitle}</Text>
+        <Text>Distance: {this.props.screenProps.distance}m</Text>
       </View>
     );
   }

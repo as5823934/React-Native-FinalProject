@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { checkOut } from '../config_auth';
 
 export default class CheckoutScreen extends React.Component {
   constructor(props) {
@@ -18,11 +19,25 @@ export default class CheckoutScreen extends React.Component {
     ),
   };
 
+  handleCheckout = () => {
+    const target = this.props.screenProps.targetLocation;
+    const title = this.props.screenProps.targetTitle;
+    checkOut(target, title);
+    this.props.screenProps.validateCheckOutButton();
+    alert('You have checked out');
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity>
-          <MaterialCommunityIcons name="logout" size={150} color="green" />
+        <TouchableOpacity
+          onPress={() => this.handleCheckout()}
+          disabled={!this.props.screenProps.isCheckOutable}>
+          <MaterialCommunityIcons
+            name="logout"
+            size={150}
+            color={!this.props.screenProps.isCheckOutable ? 'gray' : 'green'}
+          />
         </TouchableOpacity>
         <Text>CheckoutScreen</Text>
       </View>

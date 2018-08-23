@@ -2,9 +2,8 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Ionicons } from '@expo/vector-icons';
-import firebase from 'firebase';
-import { getUserInfo, addLocationToData } from '../config_auth';
-import { GOOGLE_API_KEY } from '../config_auth';
+import { addLocationToData, GOOGLE_API_KEY } from '../config_auth';
+import { calculateDistance } from '../unity';
 
 // const homePlace = {
 //   description: 'Home',
@@ -19,7 +18,7 @@ export default class SearchingScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: null,
+      targetLocation: null,
       title: null,
     };
   }
@@ -58,19 +57,31 @@ export default class SearchingScreen extends React.Component {
       renderDescription={row => row.description} // custom description render
       onPress={(data, details = null) => {
         // 'details' is provided when fetchDetails = true
-        console.log('Data!!!', data);
-        console.log('Details!!!', details);
         this.setState({
-          location: details.geometry.location,
+          targetLocation: details.geometry.location,
           title: data.structured_formatting.main_text,
         });
+
+        const currentLocation = this.props.screenProps.currentLocation;
+
+        const distance = calculateDistance(
+          currentLocation.latitude,
+          currentLocation.longitude,
+          this.state.targetLocation.lat,
+          this.state.targetLocation.lng
+        );
         // this.addInfoToFirebase(this.state.location, this.state.title);
         this.props.screenProps.submitTargetLocation(
-          this.state.location,
-          this.state.title
+          this.state.targetLocation,
+          this.state.title,
+          distance
         );
+        this.props.screenProps.setDistance(distance);
+
         this.props.navigation.navigate('Map', {
-          location: this.state.location,
+          currentLocation,
+          targetLocation: this.state.targetLocation,
+          distance,
         });
       }}
       getDefaultValue={() => ''}

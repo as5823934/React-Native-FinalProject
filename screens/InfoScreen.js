@@ -17,8 +17,7 @@ export default class InfoScreen extends React.Component {
       loggedIn: null,
       email: this.props.navigation.getParam('Email'),
       name: '',
-      course: '',
-      instructor: '',
+      phone: '',
       errMessage: null,
       loading: false,
       isFormValid: false,
@@ -27,16 +26,16 @@ export default class InfoScreen extends React.Component {
 
   writeUserData = async () => {
     const user = await firebase.auth().currentUser;
-    const { email, name, course, instructor } = this.state;
+    const { email, name, phone } = this.state;
     await firebase
       .database()
       .ref('users/')
       .child(user.uid)
+      .child('userInfo')
       .set({
         email,
         name,
-        course,
-        instructor,
+        phone,
       })
       .then(data => {
         // success callback
@@ -56,15 +55,12 @@ export default class InfoScreen extends React.Component {
   };
 
   validateForm = () => {
-    const { name, course, instructor } = this.state;
-    if (name == '' || course == '' || instructor == '') {
-      this.setState({
-        isFormValid: false,
-      });
+    const { name, phone } = this.state;
+    if (name !== '' && (phone >= 0 && phone.length === 9)) {
+      this.setState({ isFormValid: true, errMessage: null });
     } else {
       this.setState({
-        isFormValid: true,
-        errMessage: null,
+        isFormValid: false,
       });
     }
     console.log(this.state.isFormValid);
@@ -74,8 +70,7 @@ export default class InfoScreen extends React.Component {
     this.setState(
       {
         name: '',
-        course: '',
-        instructor: '',
+        phone: '',
         loading: false,
         errMessage: null,
       },
@@ -88,32 +83,29 @@ export default class InfoScreen extends React.Component {
     this.validateForm();
   };
 
-  handleCourseChange = course => {
-    this.setState({ course });
+  handlePhoneChange = phone => {
+    this.setState({ phone });
     this.validateForm();
   };
 
-  handleInstructorChange = instructor => {
-    this.setState({ instructor });
-    this.validateForm();
-  };
-
-  renderLoginButton = () => {
-        if (this.state.loading) {
-            return (
-                <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
-                    <ActivityIndicator size="large" color="#0000ff" />
-                </View>
-            );
-        } 
-            return (
-                <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
-                    <Button title="Register" onPress={this.onSubmit} disabled={!this.state.isFormValid} />
-                </View>
-            );
-        
+  renderSubmitButton = () => {
+    if (this.state.loading) {
+      return (
+        <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
     }
-
+    return (
+      <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
+        <Button
+          title="Register"
+          onPress={this.onSubmit}
+          disabled={!this.state.isFormValid}
+        />
+      </View>
+    );
+  };
 
   render() {
     return (
@@ -145,22 +137,14 @@ export default class InfoScreen extends React.Component {
           />
           <TextInput
             style={styles.input}
-            placeholder="Course"
-            onChangeText={this.handleCourseChange}
-            value={this.state.course}
-            underlineColorAndroid={'transparent'}
-            multiline={false}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Instructor"
-            onChangeText={this.handleInstructorChange}
-            value={this.state.instructor}
+            placeholder="Phone#"
+            onChangeText={this.handlePhoneChange}
+            value={this.state.phone}
             underlineColorAndroid={'transparent'}
             multiline={false}
           />
         </View>
-        {this.renderLoginButton()}
+        {this.renderSubmitButton()}
       </KeyboardAvoidingView>
     );
   }

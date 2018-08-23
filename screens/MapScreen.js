@@ -13,10 +13,10 @@ export default class MapScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentLocation: null,
-      targetLocation: this.props.navigation.getParam('location', null),
+      currentLocation: this.props.navigation.getParam('currentLocation', null),
+      targetLocation: this.props.navigation.getParam('targetLocation', null),
       title: null,
-      coords: [],
+      coords: this.props.navigation.getParam('route', null),
       curTime: new Date().toLocaleString(),
       distance: 0,
     };
@@ -32,6 +32,10 @@ export default class MapScreen extends React.Component {
     ),
   };
 
+  componentDidMount() {
+    this.getCurrentLocation();
+  }
+
   getCurrentLocation = async () => {
     const location = await getLocationAsync();
     // check if have target location
@@ -46,34 +50,33 @@ export default class MapScreen extends React.Component {
         distance,
         currentLocation: location.coords,
       });
+
+      this.getRoute(
+        `${this.state.currentLocation.latitude},${
+          this.state.currentLocation.longitude
+        }`,
+        `${this.state.targetLocation.lat},${this.state.targetLocation.lng}`
+      );
       console.log('before distance: ', distance);
     }
+
     this.setState({
       currentLocation: location.coords,
     });
-
     console.log('current location loaded:', this.state.currentLocation);
   };
-
-  componentDidMount() {
-    // this.getUpdateLocation();
-    this.getCurrentLocation();
-    console.log('new target: ', this.state.targetLocation);
-  }
 
   componentWillReceiveProps(nextProps) {
     // const newTarget = nextProps.navigation.getParam('location');
     const newTarget = nextProps.screenProps.targetLocation;
     console.log('on props receive: ', newTarget);
-    // if (newTarget !== this.state.targetLocation) {
-    //   // this.getCurrentLocation();
+
     const distance = calculateDistance(
       this.state.currentLocation.latitude,
       this.state.currentLocation.longitude,
       newTarget.lat,
       newTarget.lng
     );
-
     this.setState(
       { targetLocation: newTarget, distance },
       console.log('new target receive: ', this.state.targetLocation),
@@ -181,7 +184,7 @@ export default class MapScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.2,
+    flex: 0.3,
     backgroundColor: '#ff00ff20',
     alignItems: 'center',
     justifyContent: 'center',
