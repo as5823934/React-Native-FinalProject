@@ -49,6 +49,7 @@ export default class SearchingScreen extends React.Component {
     this.props.navigation.navigate('Map', {
       currentLocation,
       targetLocation,
+      title,
       distance,
     });
   };

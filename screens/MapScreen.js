@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
+import { MapView } from 'expo';
 
 import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 
@@ -16,7 +16,7 @@ export default class MapScreen extends React.Component {
     this.state = {
       currentLocation: this.props.navigation.getParam('currentLocation', null),
       targetLocation: this.props.navigation.getParam('targetLocation', null),
-      title: null,
+      title: this.props.navigation.getParam('title', null),
       coords: this.props.navigation.getParam('route', null),
       curTime: new Date().toLocaleString(),
       distance: 0,
@@ -132,8 +132,8 @@ export default class MapScreen extends React.Component {
               strokeColor="red"
             />
             {this.props.screenProps.targetLocation ? (
-              <Marker
-                title={'Target'}
+              <MapView.Marker
+                title={this.state.title}
                 coordinate={{
                   latitude: this.state.targetLocation.lat,
                   longitude: this.state.targetLocation.lng,
