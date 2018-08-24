@@ -69,6 +69,7 @@ export default class MapScreen extends React.Component {
   componentWillReceiveProps(nextProps) {
     // const newTarget = nextProps.navigation.getParam('location');
     const newTarget = nextProps.screenProps.targetLocation;
+    const newTargetTitle = nextProps.screenProps.targetTitle;
     console.log('on props receive: ', newTarget);
 
     const distance = calculateDistance(
@@ -78,7 +79,11 @@ export default class MapScreen extends React.Component {
       newTarget.lng
     );
     this.setState(
-      { targetLocation: newTarget, distance },
+      {
+        targetLocation: newTarget,
+        distance,
+        title: newTargetTitle,
+      },
       console.log('new target receive: ', this.state.targetLocation),
       console.log('aftre distance: ', this.state.distance)
     );
@@ -121,7 +126,7 @@ export default class MapScreen extends React.Component {
     }
     if (this.props.screenProps.targetLocation) {
       return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 2 }}>
           <MapView
             style={{ flex: 1 }}
             initialRegion={this.getMapRegion()}
@@ -143,6 +148,7 @@ export default class MapScreen extends React.Component {
             ) : null}
           </MapView>
           <View style={styles.container}>
+            <Text>Target: {this.state.title}</Text>
             <Text>Distance: {this.state.distance} m</Text>
             <Text>Date: {this.state.curTime}</Text>
             <Text>Latitude: {this.state.currentLocation.latitude}</Text>
@@ -152,9 +158,9 @@ export default class MapScreen extends React.Component {
       );
     }
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 2 }}>
         <MapView
-          style={{ flex: 2 }}
+          style={{ flex: 1 }}
           initialRegion={this.getMapRegion()}
           showsUserLocation={true}>
           <MapView.Polyline
@@ -164,6 +170,7 @@ export default class MapScreen extends React.Component {
           />
         </MapView>
         <View style={styles.container}>
+          <Text>Target: {this.state.title}</Text>
           <Text>Distance: {this.state.distance} m</Text>
           <Text>Date: {this.state.curTime}</Text>
           <Text>Latitude: {this.state.currentLocation.latitude}</Text>

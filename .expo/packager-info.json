@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 506,
-  "expoServerNgrokUrl": "https://si-rx9.hunter3934.checkinmap.exp.direct",
-  "packagerNgrokUrl": "https://packager.si-rx9.hunter3934.checkinmap.exp.direct",
-  "ngrokPid": 553,
+  "packagerPort": 19002,
+  "packagerPid": 1692,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002
 }
