@@ -7,6 +7,8 @@ import {
   KeyboardAvoidingView,
   TextInput,
   ActivityIndicator,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
@@ -136,7 +138,7 @@ export default class LoginScreen extends React.Component {
         }}>
         <Button
           title="Login"
-          color="#ffffff"
+          color="lightgray"
           onPress={this.onLogin}
           disabled={!this.state.isFormValid}
         />
@@ -146,7 +148,13 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <KeyboardAvoidingView
+        style={[
+          styles.container,
+          { paddingTop: Platform.OS === 'ios' ? 50 : 20 },
+        ]}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.select({ ios: 70, android: -500 })}>
         <View
           style={{
             paddingVertical: 50,
@@ -196,15 +204,16 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
+    justifyContent: 'center',
   },
   text: {
     textAlign: 'center',
     color: 'red',
   },
   input: {
-    borderWidth: 1,
-    borderColor: 'black',
+    borderStartWidth: 1.5,
+    borderEndWidth: 1.5,
+    borderWidth: 0.3,
     minWidth: 100,
     marginTop: 20,
     marginHorizontal: 20,

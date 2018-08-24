@@ -7,7 +7,9 @@ import {
   Button,
   TextInput,
   KeyboardAvoidingView,
+  ScrollView,
   Image,
+  Platform,
 } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
@@ -107,14 +109,15 @@ export default class PortfolioScreen extends React.Component {
   renderSubmitButton = () => (
     <View
       style={{
+        alignItems: 'center',
         marginVertical: 20,
         marginHorizontal: 30,
-        width: 200,
+
         backgroundColor: `${!this.state.editable ? 'gray' : 'blue'}`,
       }}>
       <Button
         title="Submit"
-        color="#ffffff"
+        color="lightgray"
         onPress={this.update}
         disabled={!this.state.editable}
       />
@@ -311,10 +314,15 @@ export default class PortfolioScreen extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.profileContainer}>
-        {this.renderAvatar()}
-        {this.renderContent()}
-        {this.renderSubmitButton()}
+      <KeyboardAvoidingView
+        style={styles.profileContainer}
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.select({ ios: 70, android: -500 })}>
+        <ScrollView>
+          {this.renderAvatar()}
+          {this.renderContent()}
+          {this.renderSubmitButton()}
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }
@@ -324,6 +332,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
   },

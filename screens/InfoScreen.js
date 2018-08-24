@@ -7,6 +7,8 @@ import {
   KeyboardAvoidingView,
   TextInput,
   ActivityIndicator,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import firebase from 'firebase';
 
@@ -97,6 +99,7 @@ export default class InfoScreen extends React.Component {
       <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
         <Button
           title="Register"
+          color="lightgray"
           onPress={this.onSubmit}
           disabled={!this.state.isFormValid}
         />
@@ -106,42 +109,57 @@ export default class InfoScreen extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <View style={{ paddingVertical: 30 }}>
-          <Text
-            style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center' }}>
-            Welcome
-          </Text>
-        </View>
-        <View>
-          <Text style={styles.text}>Please enter following info</Text>
-          <Text style={{ color: 'red' }}>{this.state.errMessage}</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={this.state.email}
-            underlineColorAndroid={'transparent'}
-            multiline={false}
-            editable={false}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            onChangeText={this.handleNameChange}
-            value={this.state.name}
-            underlineColorAndroid={'transparent'}
-            multiline={false}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Phone#"
-            onChangeText={this.handlePhoneChange}
-            value={this.state.phone}
-            underlineColorAndroid={'transparent'}
-            multiline={false}
-          />
-        </View>
-        {this.renderSubmitButton()}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.select({ ios: 0, android: -500 })}
+        enabled
+        style={styles.container}>
+        <ScrollView>
+          <View style={{ paddingVertical: 30 }}>
+            <Text
+              style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center' }}>
+              Welcome
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.text}>Please enter following info</Text>
+            <Text style={{ color: 'red' }}>{this.state.errMessage}</Text>
+            <TextInput
+              style={[
+                styles.input,
+                { borderColor: `${!this.state.editable ? 'gray' : 'blue'}` },
+              ]}
+              placeholder="Email"
+              value={this.state.email}
+              underlineColorAndroid={'transparent'}
+              multiline={false}
+              editable={false}
+            />
+            <TextInput
+              style={[
+                styles.input,
+                { borderColor: `${!this.state.editable ? 'gray' : 'blue'}` },
+              ]}
+              placeholder="Name"
+              onChangeText={this.handleNameChange}
+              value={this.state.name}
+              underlineColorAndroid={'transparent'}
+              multiline={false}
+            />
+            <TextInput
+              style={[
+                styles.input,
+                { borderColor: `${!this.state.editable ? 'gray' : 'blue'}` },
+              ]}
+              placeholder="Phone#"
+              onChangeText={this.handlePhoneChange}
+              value={this.state.phone}
+              underlineColorAndroid={'transparent'}
+              multiline={false}
+            />
+          </View>
+          {this.renderSubmitButton()}
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }
@@ -158,8 +176,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    borderWidth: 1,
-    borderColor: 'black',
+    borderStartWidth: 1.5,
+    borderEndWidth: 1.5,
+    borderWidth: 0.3,
     minWidth: 100,
     marginTop: 20,
     marginHorizontal: 20,
