@@ -27,17 +27,22 @@ export const getLocationAsync = async () => {
 };
 
 export const updateLocation = async () => {
-  Location.watchPositionAsync(
-    {
-      enableHighAccuracy: true,
-      distanceInterval: 10,
-    },
-    NewLocation => {
-      const coords = NewLocation.coords;
-      console.log('NEW LOCATION COORDS', coords);
-      return coords;
-    }
-  );
+  // const { status } = await Permissions.askAsync(Permissions.LOCATION);
+  // if (status !== 'granted') {
+  //   console.error('Location permission not granted!');
+  // }
+  // await Location.watchPositionAsync(
+  //   {
+  //     enableHighAccuracy: true,
+  //     distanceInterval: 0,
+  //     timeInterval: 1000,
+  //   },
+  //   NewLocation => {
+  //     const coords = NewLocation.coords;
+  //     // console.log('NEW LOCATION COORDS', coords);
+  //     return coords;
+  //   }
+  // );
 };
 
 export const getDirections = async (startLoc, destinationLoc) => {

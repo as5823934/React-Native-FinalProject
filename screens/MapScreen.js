@@ -2,10 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
+
 import { calculateDistance, getLocationAsync, getDirections } from '../unity';
 
-const LATITUDE_DELTA = 0.0922 / 1.5;
-const LONGITUDE_DELTA = 0.0421 / 1.5;
+const LATITUDE_DELTA = 0.0922 / 2;
+const LONGITUDE_DELTA = 0.0421 / 2;
 const LATITUDE = 49.1913466;
 const LONGITUDE = -122.8490125;
 
@@ -38,6 +39,7 @@ export default class MapScreen extends React.Component {
 
   getCurrentLocation = async () => {
     const location = await getLocationAsync();
+    // const location = await updateLocation();
     // check if have target location
     if (this.state.targetLocation) {
       const distance = calculateDistance(
@@ -50,7 +52,6 @@ export default class MapScreen extends React.Component {
         distance,
         currentLocation: location.coords,
       });
-
       this.getRoute(
         `${this.state.currentLocation.latitude},${
           this.state.currentLocation.longitude
@@ -59,7 +60,6 @@ export default class MapScreen extends React.Component {
       );
       console.log('before distance: ', distance);
     }
-
     this.setState({
       currentLocation: location.coords,
     });
@@ -122,18 +122,14 @@ export default class MapScreen extends React.Component {
     if (this.props.screenProps.targetLocation) {
       return (
         <View style={{ flex: 1 }}>
-          <MapView style={{ flex: 1 }} initialRegion={this.getMapRegion()}>
+          <MapView
+            style={{ flex: 1 }}
+            initialRegion={this.getMapRegion()}
+            showsUserLocation={true}>
             <MapView.Polyline
               coordinates={this.state.coords}
-              strokeWidth={2}
+              strokeWidth={4}
               strokeColor="red"
-            />
-            <Marker
-              title="You"
-              coordinate={{
-                latitude: this.state.currentLocation.latitude,
-                longitude: this.state.currentLocation.longitude,
-              }}
             />
             {this.props.screenProps.targetLocation ? (
               <Marker
@@ -157,18 +153,14 @@ export default class MapScreen extends React.Component {
     }
     return (
       <View style={{ flex: 1 }}>
-        <MapView style={{ flex: 2 }} initialRegion={this.getMapRegion()}>
+        <MapView
+          style={{ flex: 2 }}
+          initialRegion={this.getMapRegion()}
+          showsUserLocation={true}>
           <MapView.Polyline
             coordinates={this.state.coords}
-            strokeWidth={2}
+            strokeWidth={4}
             strokeColor="red"
-          />
-          <Marker
-            title="You"
-            coordinate={{
-              latitude: this.state.currentLocation.latitude,
-              longitude: this.state.currentLocation.longitude,
-            }}
           />
         </MapView>
         <View style={styles.container}>

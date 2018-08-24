@@ -4321,6 +4321,10 @@ react-lifecycles-compat@^3, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
+react-native-actionsheet@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
+
 react-native-branch@2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
@@ -4357,6 +4361,10 @@ react-native-google-places-autocomplete@^1.3.9:
     prop-types "^15.5.10"
     qs "^5.2.0"
 
+react-native-image-crop-picker@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.21.1.tgz#0903b11644e88cca3d178e3a16b451a310969b8b"
+
 react-native-map@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/react-native-map/-/react-native-map-0.0.1.tgz#1b64b2647c2a7f50d6cf458488a5dac8158f9951"
@@ -4389,10 +4397,6 @@ react-native-safe-module@^1.1.0:
   resolved "https://registry.yarnpkg.com/react-native-safe-module/-/react-native-safe-module-1.2.0.tgz#a23824ca24edc2901913694a76646475113d570d"
   dependencies:
     dedent "^0.6.0"
-
-react-native-snackbar@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-snackbar/-/react-native-snackbar-0.5.0.tgz#f065e1616142dff45cc4bf33c85009fc2f9ae6b4"
 
 react-native-svg@6.2.2:
   version "6.2.2"

@@ -18,6 +18,7 @@ export default class InfoScreen extends React.Component {
       email: this.props.navigation.getParam('Email'),
       name: '',
       phone: '',
+      thumbnailURL: null,
       errMessage: null,
       loading: false,
       isFormValid: false,
@@ -26,17 +27,13 @@ export default class InfoScreen extends React.Component {
 
   writeUserData = async () => {
     const user = await firebase.auth().currentUser;
-    const { email, name, phone } = this.state;
+    const { email, name, phone, thumbnailURL } = this.state;
     await firebase
       .database()
       .ref('users/')
       .child(user.uid)
       .child('userInfo')
-      .set({
-        email,
-        name,
-        phone,
-      })
+      .set({ email, name, phone, thumbnailURL })
       .then(data => {
         // success callback
         this.setState({ loading: true });

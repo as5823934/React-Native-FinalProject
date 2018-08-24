@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import firebase from 'firebase';
-import { getUserInfo, updateCurrentLocation, checkIn } from '../config_auth';
+import { updateCurrentLocation, checkIn } from '../config_auth';
 import { calculateDistance, getLocationAsync } from '../unity';
 
 export default class CheckinScreen extends React.Component {
@@ -11,7 +10,6 @@ export default class CheckinScreen extends React.Component {
     this.state = {
       currentLocation: null,
       targetLocation: this.props.screenProps.targetLocation,
-      id: this.props.navigation.getParam('UID'),
       userInfo: null,
       distance: 0,
     };
@@ -52,6 +50,7 @@ export default class CheckinScreen extends React.Component {
 
   getCurrentLocation = async () => {
     const location = await getLocationAsync();
+    // const location = await updateLocation();
     this.setState({ currentLocation: location.coords });
     updateCurrentLocation(this.state.currentLocation);
     this.props.screenProps.setCurrentLocation(this.state.currentLocation);
@@ -74,7 +73,7 @@ export default class CheckinScreen extends React.Component {
     console.log(distance);
     console.log('screenProps:', title, target);
 
-    if (distance > 100172) {
+    if (distance > 50) {
       alert('You can not check in');
     } else {
       checkIn(target, title);
@@ -95,7 +94,7 @@ export default class CheckinScreen extends React.Component {
             color={!this.props.screenProps.isCheckInable ? 'gray' : 'green'}
           />
         </TouchableOpacity>
-        <Text>Checkin</Text>
+        <Text>Check In</Text>
         <Text>Destination: {this.props.screenProps.targetTitle}</Text>
         <Text>Distance: {this.props.screenProps.distance}m</Text>
       </View>

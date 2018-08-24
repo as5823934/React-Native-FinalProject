@@ -39,7 +39,7 @@ export default class CheckoutScreen extends React.Component {
             color={!this.props.screenProps.isCheckOutable ? 'gray' : 'green'}
           />
         </TouchableOpacity>
-        <Text>CheckoutScreen</Text>
+        <Text>Check Out</Text>
       </View>
     );
   }

@@ -8,6 +8,7 @@ import {
   TextInput,
   ActivityIndicator,
 } from 'react-native';
+import { SimpleLineIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
 
 export default class LoginScreen extends React.Component {
@@ -117,15 +118,25 @@ export default class LoginScreen extends React.Component {
   renderLoginButton = () => {
     if (this.state.loading) {
       return (
-        <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
+        <View
+          style={{
+            marginVertical: 20,
+            marginHorizontal: 30,
+          }}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       );
     }
     return (
-      <View style={{ marginVertical: 20, marginHorizontal: 30 }}>
+      <View
+        style={{
+          marginVertical: 20,
+          marginHorizontal: 30,
+          backgroundColor: `${!this.state.isFormValid ? 'gray' : 'blue'}`,
+        }}>
         <Button
           title="Login"
+          color="#ffffff"
           onPress={this.onLogin}
           disabled={!this.state.isFormValid}
         />
@@ -136,9 +147,22 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <View style={{ paddingVertical: 30 }}>
+        <View
+          style={{
+            paddingVertical: 50,
+            alignItems: 'center',
+          }}>
+          <SimpleLineIcons
+            name="note"
+            size={130}
+            style={{ marginBottom: 40 }}
+          />
           <Text
-            style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center' }}>
+            style={{
+              fontSize: 30,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
             Attendants
           </Text>
         </View>
@@ -172,7 +196,7 @@ export default class LoginScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 60,
   },
   text: {
     textAlign: 'center',
